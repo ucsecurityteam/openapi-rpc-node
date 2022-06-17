@@ -1,0 +1,71 @@
+{
+  "swagger": "2.0",
+  "basePath": "/comm_service",
+  "info": {
+    "description": "This is where you write the description of your service.",
+    "version": "1.0.0",
+    "title": "Example"
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "summary": "Creates a new user.",
+        "consumes": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The user to create.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "userName"
+              ],
+              "properties": {
+                "userName": {
+                  "type": "string"
+                },
+                "firstName": {
+                  "type": "string"
+                },
+                "lastName": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "userName"
+      ],
+      "properties": {
+        "userName": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

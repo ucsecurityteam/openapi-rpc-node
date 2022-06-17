@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "type": "object",
+  "properties": {
+    "uri": {
+      "type": [
+        "string"
+      ]
+    },
+    "url": {
+      "type": [
+        "string"
+      ]
+    },
+    "method": {
+      "type": [
+        "string"
+      ]
+    },
+    "body": {
+      "type": ["object", "array"],
+      "properties": {
+      }
+    },
+    "qs": {
+      "type": "object",
+      "properties": {
+      }
+    },
+    "json": {
+      "type": [
+        "boolean"
+      ]
+    },
+    "timeout": {
+      "type": [
+        "number"
+      ]
+    },
+    "encoding": {
+      "type": [
+        "string"
+      ]
+    },
+    "headers": {
+      "type": "object",
+      "properties": {
+      }
+    },
+    "form": {
+      "type": "object",
+      "properties": {
+      }
+    },
+    "formData": {
+      "type": "object",
+      "properties": {
+      }
+    },
+    "secureProtocol": {
+      "type": [
+        "string"
+      ]
+    },
+    "rejectUnauthorized": {
+      "type": [
+        "boolean"
+      ]
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "method"
+  ],
+  "oneOf": [
+    {
+      "required": [
+        "uri"
+      ]
+    },
+    {
+      "required": [
+        "url"
+      ]
+    }
+  ]
+}
