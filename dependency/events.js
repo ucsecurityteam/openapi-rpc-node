@@ -38,7 +38,7 @@ function authorizeClient(producerId, platformConf){
 }
 
 Events.initEventConsumer = async (params, RPCFramework) => {
-  const EventLib = require('trajectory');
+  const EventLib = require('@uc-engg/trajectory');
   let Singleton = RPCFramework.getSingleton();
   let Config = Singleton.Config;
   let Slack = Singleton.Slack;
@@ -146,7 +146,7 @@ async function initProducer(params, RPCFramework, inititiateProducer) {
 }
 
 Events.initEventProducer = async (params, RPCFramework) => {
-  const EventLib = require('trajectory');
+  const EventLib = require('@uc-engg/trajectory');
   // To Do : Restructure avro code for better maintainability
   // let initProducerFunc = (params.schema_type == RPC_CONSTANTS.SCHEMA_TYPE.AVRO) ? EventLib.initAvroProducer : EventLib.initProducer;
 

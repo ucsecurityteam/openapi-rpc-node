@@ -52,7 +52,7 @@ AuthService.initAuthService = async (params, RPCFramework) => {
   _.set(cacheAuthParams, 'options.session-auth.registered_services', ['auth_service', Singleton.Config.SERVICE_ID])
   Cache.initCacheClient(cacheAuthParams, RPCFramework)
 
-  const client = require('acropolis')(Singleton);
+  const client = require('@uc-engg/acropolis')(Singleton);
   RPCFramework.addToSingleton(params.singleton_id || params.id, client); 
 
   // Init authorisation client

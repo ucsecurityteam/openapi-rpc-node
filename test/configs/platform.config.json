@@ -1,1 +1,8 @@
-{}
+{
+    "serviceDependencySchema": {
+        "type": "custom",
+        "properties": {
+            "generatedSchemaFilePath": "dependency_schemas.json"
+        }
+    }
+}

@@ -1,6 +1,6 @@
 {
-  "name": "@uc-engg/@uc-engg/openapi-rpc-node",
-  "version": "0.0.14",
+  "name": "@uc-engg/openapi-rpc-node",
+  "version": "1.0.0",
   "description": "An RPC (OpenApi 2.0) framework for node using express",
   "main": "index.js",
   "repository": {
@@ -23,7 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@newrelic/native-metrics": "^4.0.0",
-    "@uc-engg/armor": "~0.0.4",
+    "@uc-engg/armor": "^1.0.0",
     "aws4": "^1.8.0",
     "bluebird": "^3.5.0",
     "body-parser": "^1.18.2",

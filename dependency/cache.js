@@ -2,7 +2,7 @@
 let Cache = {};
 
 Cache.initCacheClient = (params, RPCFramework) => {
-    const Flash = require('flash');
+    const Flash = require('@uc-engg/flash');
     let Config = RPCFramework.getSingleton().Config;
     let cacheConnectionConfig = Config.getExternalConf('cache-main');
     let cache = new Flash();

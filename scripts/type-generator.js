@@ -4,7 +4,7 @@ const _ = require('lodash');
 const OpenApiSchema = require('../schema/services/fetch_schema_object');
 const Constants = require('../constants');
 const fs = require('fs');
-const DIR = '../@uc-engg/openapi-rpc-node/types/';
+const DIR = '../openapi-rpc-node/types/';
 const TypeSwagger = require('@uc-engg/type-swagger');
 const RPCServices = Constants.DEPENDENCY.ID.INTERNAL_SERVICE;
 
