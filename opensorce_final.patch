@@ -1,0 +1,482 @@
+diff --git a/README.md b/README.md
+index 6e1d82f..0c770d6 100644
+--- a/README.md
++++ b/README.md
+@@ -1,6 +1,6 @@
+-# Openapi-rpc-node
++# @uc-engg/openapi-rpc-node
+ 
+-```Openapi-rpc-node``` is a NodeJs library aimed at providing you a complete microservices framework solution. It comes integrated with out of the box solutions to solve for every problem. At urbancompany we have built our entire microservices ecosystem within this library.
++```@uc-engg/openapi-rpc-node``` is a NodeJs library aimed at providing you a complete microservices framework solution. It comes integrated with out of the box solutions to solve for every problem. At urbancompany we have built our entire microservices ecosystem within this library.
+ 
+ Some of the most notable capabilities:
+ 
+@@ -104,7 +104,7 @@ You need to add the below code in your server.js. Here initService returns a pro
+ Example:
+ ```Javascript
+ 'use strict';
+-let RPCFramework = require('@uc-engg/openapi-rpc-node').initService()
++let RPCFramework = require('@uc-engg/@uc-engg/openapi-rpc-node').initService()
+ 
+ ```
+ 
+diff --git a/auth/auth_metric_utils.js b/auth/auth_metric_utils.js
+index a4b82e4..d176c60 100644
+--- a/auth/auth_metric_utils.js
++++ b/auth/auth_metric_utils.js
+@@ -1,4 +1,4 @@
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ /**
+  * Standard Logger should be used when
+  * 1. We are logging at the time of server startup (no transaction context present).
+diff --git a/auth/authentication.js b/auth/authentication.js
+index dcaee1a..ca490c1 100644
+--- a/auth/authentication.js
++++ b/auth/authentication.js
+@@ -14,7 +14,7 @@ const AuditContextConstants = Singleton.AuditContextConstants;
+ const Authentication = {};
+ const RPC_CONSTANTS = require('../constants');
+ const ERRORS = require('../error');
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const AUTH_CONSTANTS = require('./auth_constants').AUTH_METRICS;
+ const AUTH_TOKEN_TYPE = AUTH_CONSTANTS.TOKEN.TYPE;
+ const AUTH_CAPTCHA_TYPE = AUTH_CONSTANTS.CAPTCHA.TYPE;
+diff --git a/circuit_breaker/index.js b/circuit_breaker/index.js
+index affe8ad..d32d7b3 100644
+--- a/circuit_breaker/index.js
++++ b/circuit_breaker/index.js
+@@ -1,4 +1,4 @@
+-const Armor = require('@uc/armor');
++const Armor = require('@uc-engg/armor');
+ const Singleton = require('../singleton').getSingleton();
+ const _ = require('lodash');
+ const RequestPromise = require('request-promise');
+diff --git a/common/config_utils.js b/common/config_utils.js
+index 2f550a9..e0e6f3e 100644
+--- a/common/config_utils.js
++++ b/common/config_utils.js
+@@ -13,7 +13,7 @@ const GLOBAL_CONFIG = {
+   FILE_NAME: 'global.config.json',
+   RELATIVE_PATH_FROM_ROOT: 'configs/global.config.json'
+ }
+-const OARPC_SERVICE_NAME = '@uc/openapi-rpc-node'
++const OARPC_SERVICE_NAME = '@uc/@uc-engg/openapi-rpc-node'
+ 
+ const mergeWithArrayAsLiteral = (destOject, srcObject) => {
+   return _.mergeWith(destOject, srcObject, (objValue, srcValue) => {  if(Array.isArray(objValue) || Array.isArray(srcValue)) return srcValue });
+diff --git a/dependency/mongodb.js b/dependency/mongodb.js
+index b396ce1..aca1b08 100644
+--- a/dependency/mongodb.js
++++ b/dependency/mongodb.js
+@@ -7,6 +7,7 @@ const RPC_CONSTANTS = require('../constants');
+ const MONGODB_CONNECTION_OPTIONS = RPC_CONSTANTS.MONGODB_CONNECTION_OPTIONS;
+ const _ = require('lodash');
+ const Utils = require('./utils');
++const ConfigUtils = require('../common/config_utils');
+ let Mongodb = {}
+ 
+ Mongodb.initMongodbClient = async (params, RPCFramework) => {
+@@ -118,7 +119,7 @@ function setTimeoutOptions(params){
+   if (_.has(params.mongoose_options, MONGODB_CONNECTION_OPTIONS.CONNECT_TIMEOUT_OPTION_KEY)){
+     timeoutOptions.socketOptions.connectTimeoutMS = params.mongoose_options[MONGODB_CONNECTION_OPTIONS.CONNECT_TIMEOUT_OPTION_KEY];
+   }
+-  const pjson = require('../../../package.json');
++  const pjson = require(ConfigUtils.getParentWorkingDir() + '/package.json');
+   const mongooseVersion = parseInt(pjson.dependencies.mongoose.replace(/~|\^/g, ''))
+   if ( mongooseVersion < 5 ) {
+     params.mongoose_options['replset'] = timeoutOptions
+diff --git a/dependency/mycroft_monitoring.js b/dependency/mycroft_monitoring.js
+index 8639771..3d04549 100644
+--- a/dependency/mycroft_monitoring.js
++++ b/dependency/mycroft_monitoring.js
+@@ -1,6 +1,6 @@
+ 'use strict'
+ 
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const Logger = require('../logging/standard_logger');
+ const LOG_CONSTANTS = require('../logging/log_constants');
+ const LOG_TYPE = require('../logging/log_type');
+diff --git a/index.js b/index.js
+index ffced54..cb6b3ab 100644
+--- a/index.js
++++ b/index.js
+@@ -238,7 +238,7 @@ RpcFramework.createTrxnId = function() {
+  * This allows you to store global objects.
+  * This is partiularly useful for storing initialised DB connections, config, logger, etc.
+  * How to use –
+- *   Singleton = require('openapi-rpc-node').getSingleton();
++ *   Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
+  *   Logger = Singleton.Logger;
+  *   Config = Singleton.Config;
+  *   MongoMainStore = Singleton.mongoMainStore;
+@@ -276,7 +276,7 @@ RpcFramework.getGatewayConstants = function() {
+ 
+ /**
+  * Run workflow tasks. src/workflow/index changes example:
+- * require('openapi-rpc-node').initWorkflow();
++ * require('@uc-engg/openapi-rpc-node').initWorkflow();
+  *
+  * For more details, refer below document:
+  * https://urbanclap.atlassian.net/wiki/spaces/ENGG/pages/1191051293/How+to+write+a+script+in+nodejs
+@@ -287,7 +287,7 @@ RpcFramework.initWorkflow = function() {
+ 
+ /**
+  * Run service. server.js file changes example:
+- * let RPCFramework = require('openapi-rpc-node').initService()
++ * let RPCFramework = require('@uc-engg/openapi-rpc-node').initService()
+  *
+  * For more details, refer below document:
+  * https://urbanclap.atlassian.net/wiki/spaces/ENGG/pages/1192132689/How+to+write+a+service+in+nodejs
+@@ -299,7 +299,7 @@ RpcFramework.initService = function() {
+ /**
+  * Run the service using using the Service object. server.js file changes example:
+  *
+- *  let Service = require('openapi-rpc-node').getService();
++ *  let Service = require('@uc-engg/openapi-rpc-node').getService();
+  *
+  *  Service.initDependency()
+  *  .then(function () {
+@@ -317,7 +317,7 @@ RpcFramework.getService = function() {
+ /**
+  * Run workflow task using using the Workflow object. src/workflow/index file changes example:
+  *
+- *  let workflow = require('openapi-rpc-node').getWorkflow();
++ *  let workflow = require('@uc-engg/openapi-rpc-node').getWorkflow();
+  *
+  *  workflow.initDependency()
+  *  .then(function () {
+@@ -352,7 +352,7 @@ RpcFramework.getWorkflow = function() {
+  * timeoutInMs -> 0
+  *
+  * Example:
+- * let retryablePromise = require('openapi-rpc-node').getRetryablePromise;
++ * let retryablePromise = require('@uc-engg/openapi-rpc-node').getRetryablePromise;
+  * let retryOptions = {
+  *  retries: 3,
+  *  timeoutInMs: 2000,
+diff --git a/localisation/index.js b/localisation/index.js
+index 18e628b..79fa9e0 100644
+--- a/localisation/index.js
++++ b/localisation/index.js
+@@ -6,7 +6,7 @@ function initLocalisationService(serviceId, RpcFramework){
+   let localisation = {
+     /*
+       How to use the below methods from SM or any micro service
+-      1.) const Singleton = require('openapi-rpc-node').getSingleton();
++      1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
+       2.) const L = Singleton.Localisation;
+       3.) const R = require('/resources/localization.strings')
+       4.)
+@@ -25,7 +25,7 @@ function initLocalisationService(serviceId, RpcFramework){
+     /*
+       How to use the below methods from SM or any micro service
+       Note : Here type is dynamic inside Resources. Below method will get called if strings are coming from database
+-      1.) const Singleton = require('openapi-rpc-node').getSingleton();
++      1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
+       2.) const L = Singleton.Localisation;
+       3.) const R = require('/resources/localization.strings')
+       4.)
+@@ -45,7 +45,7 @@ function initLocalisationService(serviceId, RpcFramework){
+        This method will get called from API middle layer. Please don't call it from your micro service until
+        and unless you have a specific use case
+ 
+-       1.) const Singleton = require('openapi-rpc-node').getSingleton();
++       1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
+        2.) const L = Singleton.Localisation;
+        3.) L.getLocalizedResponse(response, options)
+           a.) here response is the api response which we sent to clients
+diff --git a/localisation/localisation_metric_utils.js b/localisation/localisation_metric_utils.js
+index 0d7eb84..f78cc3d 100644
+--- a/localisation/localisation_metric_utils.js
++++ b/localisation/localisation_metric_utils.js
+@@ -1,4 +1,4 @@
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const _ = require('lodash');
+ const Logger = require('../logging/standard_logger');
+ const LocalisationMetricConstants = require('./constants').LOCALISATION_METRICS;
+diff --git a/localisation/service.js b/localisation/service.js
+index 8c427ef..00ffb78 100644
+--- a/localisation/service.js
++++ b/localisation/service.js
+@@ -3,7 +3,7 @@
+ //------------------------- PACKAGES----------------------------//
+ 
+ const _ = require('lodash');
+-const Command = require('@uc/armor').initCircuitBreaker();
++const Command = require('@uc-engg/armor').initCircuitBreaker();
+ const Constants = require('./constants');
+ const LocalisationMetricConstants = Constants.LOCALISATION_METRICS;
+ const LOG_CONSTANTS = require('../logging/log_constants');
+diff --git a/logger.js b/logger.js
+index dd1d8e9..4e2ad82 100644
+--- a/logger.js
++++ b/logger.js
+@@ -1,7 +1,7 @@
+ 'use strict';
+ 
+ const _ = require('lodash');
+-const loggerInstance = require('@uc/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
++const loggerInstance = require('@uc-engg/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
+ const logFilter = require('./logging/filter');
+ const Error = require('./error');
+ 
+diff --git a/logging/logging_metric_util.js b/logging/logging_metric_util.js
+index cfa339d..ccf1aeb 100644
+--- a/logging/logging_metric_util.js
++++ b/logging/logging_metric_util.js
+@@ -1,6 +1,6 @@
+ const LoggingMetricConstants = require('./logging_metric_constants');
+ const LOG_CONSTANTS = require('./log_constants');
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const RPC_METRICS = require('../monitoring/monitoring_constants').RPC_METRICS;
+ const Singleton = require('../singleton').getSingleton();
+ const LoggingMetricUtility = {};
+diff --git a/logging/standard_logger.js b/logging/standard_logger.js
+index 1b1ff30..519f8c6 100644
+--- a/logging/standard_logger.js
++++ b/logging/standard_logger.js
+@@ -12,7 +12,7 @@
+  */
+ 
+ var _ = require('lodash');
+-var loggerInstance = require('@uc/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
++var loggerInstance = require('@uc-engg/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
+ const logFilter = require('./filter');
+ const LOG_CONSTANTS = require('./log_constants');
+ const LOG_TYPE = require('./log_type');
+diff --git a/monitoring/mycroft_capture.js b/monitoring/mycroft_capture.js
+index a63c363..d35228d 100644
+--- a/monitoring/mycroft_capture.js
++++ b/monitoring/mycroft_capture.js
+@@ -5,7 +5,7 @@ const LOG_CONSTANTS = require('../logging/log_constants');
+ const Logger = require('../logging/standard_logger');
+ const LOG_TYPE = require('../logging/log_type');
+ const Error = require('../error');
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const _ = require('lodash');
+ const RPC_CONSTANTS = require('../constants');
+ const Singleton = require('../singleton').getSingleton();
+diff --git a/monitoring/mycroft_exporter.js b/monitoring/mycroft_exporter.js
+index f4a46c4..8b40481 100644
+--- a/monitoring/mycroft_exporter.js
++++ b/monitoring/mycroft_exporter.js
+@@ -6,7 +6,7 @@ const Logger = require('../logging/standard_logger');
+ const LOG_TYPE = require('../logging/log_type');
+ const Error = require('../error');
+ const RPC_CONSTANTS = require('../constants');
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ const Events = require('../dependency/events');
+ const RPC_METRICS = MONITORING_CONSTANTS.RPC_METRICS;
+ const MIDDLEWARE_METRICS = MONITORING_CONSTANTS.MIDDLEWARE_METRICS;
+diff --git a/monitoring/mycroft_init_util.js b/monitoring/mycroft_init_util.js
+index a692271..f510ded 100644
+--- a/monitoring/mycroft_init_util.js
++++ b/monitoring/mycroft_init_util.js
+@@ -1,4 +1,4 @@
+-const Mycroft = require('@uc/mycroft');
++const Mycroft = require('@uc-engg/mycroft');
+ 
+ const MycroftInitUtil = {}
+ 
+diff --git a/openapi-rpc-node.d.ts b/openapi-rpc-node.d.ts
+index 5b0aae7..4754fb0 100644
+--- a/openapi-rpc-node.d.ts
++++ b/openapi-rpc-node.d.ts
+@@ -1,6 +1,6 @@
+ /// <reference path="types/clients.d.ts" />
+ 
+-declare module 'openapi-rpc-node' {
++declare module '@uc-engg/openapi-rpc-node' {
+   export type singletonMapInterface = ClientMap & {Logger: LoggerInterface};
+   export type auditContextInterface = {
+     getKeys: Function;
+diff --git a/package.json b/package.json
+index 954c1b0..c042a71 100644
+--- a/package.json
++++ b/package.json
+@@ -1,11 +1,11 @@
+ {
+-  "name": "@uc-engg/openapi-rpc-node",
++  "name": "@uc-engg/@uc-engg/openapi-rpc-node",
+   "version": "0.0.14",
+   "description": "An RPC (OpenApi 2.0) framework for node using express",
+   "main": "index.js",
+   "repository": {
+     "type": "git",
+-    "url": "git+ssh://git@github.com:urbanclap-engg/openapi-rpc-node.git"
++    "url": "git+ssh://git@github.com:urbanclap-engg/@uc-engg/openapi-rpc-node.git"
+   },
+   "scripts": {
+     "unit": "jest --config=jest_config.js --runInBand",
+@@ -23,7 +23,7 @@
+   "license": "MIT",
+   "dependencies": {
+     "@newrelic/native-metrics": "^4.0.0",
+-    "@uc/armor": "~0.0.4",
++    "@uc-engg/armor": "~0.0.4",
+     "aws4": "^1.8.0",
+     "bluebird": "^3.5.0",
+     "body-parser": "^1.18.2",
+@@ -38,7 +38,7 @@
+     "jsonschema": "^1.2.0",
+     "lodash": "^4.17.4",
+     "mongoose-schema-jsonschema": "1.2.1",
+-    "@uc/logging-repo": "^1.0.0",
++    "@uc-engg/logging-repo": "^1.0.0",
+     "lru-cache": "6.0.0",
+     "newrelic": "~5.6.1",
+     "node-vault": "^0.9.10",
+@@ -47,7 +47,7 @@
+     "esprima": "4.0.1",
+     "swagger-express-validator": "^0.0.9",
+     "uuid": "3.3.0",
+-    "@uc/type-swagger": "~0.0.1",
++    "@uc-engg/type-swagger": "^1.0.0",
+     "cron-parser": "2.13.0",
+     "change-case": "^3.0.1",
+     "composable-middleware": "^0.3.0",
+@@ -55,7 +55,7 @@
+     "connect-multiparty": "2.2.0",
+     "json-schema-filter": "0.1.5",
+     "luxon": "1.25.0",
+-    "@uc/mycroft": "^1.1.3",
++    "@uc-engg/mycroft": "^1.0.0",
+     "typescript": "3.1.6",
+     "express-jwt": "3.3.0",
+     "request-stats": "3.0.0",
+@@ -63,7 +63,7 @@
+     "pprof": "1.2.0",
+     "heapdump": "0.3.15",
+     "@google-cloud/profiler": "3.0.1",
+-    "@uc/openapi-validator-middleware": "~0.0.1",
++    "@uc-engg/openapi-validator-middleware": "^1.0.0",
+     "agentkeepalive": "4.1.4",
+     "axios": "~0.21.1"
+   },
+diff --git a/rpc-client.js b/rpc-client.js
+index c7f7d7b..70a6e98 100644
+--- a/rpc-client.js
++++ b/rpc-client.js
+@@ -21,7 +21,7 @@ const ErrorTypes = require('./error');
+ const RPC_Constants = require('./constants');
+ const LOG_CONSTANTS = require('./logging/log_constants');
+ const LOG_TYPE = require('./logging/log_type');
+-const Armor = require('@uc/armor');
++const Armor = require('@uc-engg/armor');
+ const expandSchemaRef = require('expand-swagger-refs').expanded;
+ const Ajv = require("ajv")
+ const retryablePromiseWrapper = require('./retryable_promise');
+diff --git a/rpc-server.js b/rpc-server.js
+index d5530d7..26c2048 100644
+--- a/rpc-server.js
++++ b/rpc-server.js
+@@ -42,7 +42,7 @@ const APPLICATION_METRICS = Monitoring.CONSTANTS.APPLICATION_METRICS;
+ const APMTransactionTracker = require('./monitoring/background-transaction-tracker');
+ const RpcServer = {};
+ const PROFILER_CONSTANTS = require('./profiler/constants');
+-const swaggerValidation = require('@uc/openapi-validator-middleware');
++const swaggerValidation = require('@uc-engg/openapi-validator-middleware');
+ const { getMethodImplementation } = require('./dependency/utils')
+ 
+ /**
+diff --git a/scripts/constants.js b/scripts/constants.js
+index d1ecd67..8416180 100644
+--- a/scripts/constants.js
++++ b/scripts/constants.js
+@@ -11,7 +11,7 @@ const CONSTANTS = {
+   MONOLITH_SCHEMA_FETCH_SUCCESS_RATIO: 0.7,
+   MICROSERVICE_SCHEMA_FETCH_SUCCESS_RATIO: 1.0,
+   SERVICE_TO_GIT_NAME_MAPPING: SERVICE_TO_GIT_NAME_MAPPING,
+-  OARPC_SERVICE_NAME: '@uc/openapi-rpc-node',
++  OARPC_SERVICE_NAME: '@uc/@uc-engg/openapi-rpc-node',
+   PLATFORM_CONFIG_SERVICE: 'platform-config-service',
+   DEFAULT_DEPENDENCY_FOR_GATEWAY: ['access-control-service'],
+   DEFAULT_DEPENDENCY: ['platform-config-service', 'system-healing-service', 'xp-service', 'data-event-service'],
+diff --git a/scripts/type-generator.js b/scripts/type-generator.js
+index f6df3b4..0cef9d7 100644
+--- a/scripts/type-generator.js
++++ b/scripts/type-generator.js
+@@ -4,8 +4,8 @@ const _ = require('lodash');
+ const OpenApiSchema = require('../schema/services/fetch_schema_object');
+ const Constants = require('../constants');
+ const fs = require('fs');
+-const DIR = '../openapi-rpc-node/types/';
+-const TypeSwagger = require('@uc/type-swagger');
++const DIR = '../@uc-engg/openapi-rpc-node/types/';
++const TypeSwagger = require('@uc-engg/type-swagger');
+ const RPCServices = Constants.DEPENDENCY.ID.INTERNAL_SERVICE;
+ 
+ const TypeGenerator = {};
+diff --git a/test/unit/log_module/standard_logger.test.js b/test/unit/log_module/standard_logger.test.js
+index 783331c..e666d0d 100644
+--- a/test/unit/log_module/standard_logger.test.js
++++ b/test/unit/log_module/standard_logger.test.js
+@@ -5,7 +5,7 @@ const testSetup = require('../test-loader')();
+ // Project specific mocks end
+ 
+ // Module imports start
+-var LoggingRepo = require('@uc/logging-repo').initLogger();
++var LoggingRepo = require('@uc-engg/logging-repo').initLogger();
+ const testData = testSetup.testData;
+ // Module imports end
+ 
+diff --git a/test/unit/mockers/log_module/standard_logger.mock.js b/test/unit/mockers/log_module/standard_logger.mock.js
+index 00254d8..28064eb 100644
+--- a/test/unit/mockers/log_module/standard_logger.mock.js
++++ b/test/unit/mockers/log_module/standard_logger.mock.js
+@@ -1,4 +1,4 @@
+-const LoggingRepo = require('@uc/logging-repo');
++const LoggingRepo = require('@uc-engg/logging-repo');
+ const Logger = {
+   info: jest.fn(),
+   error: jest.fn(),
+diff --git a/test/unit/mockers/mock.js b/test/unit/mockers/mock.js
+index 51d5094..40fec19 100644
+--- a/test/unit/mockers/mock.js
++++ b/test/unit/mockers/mock.js
+@@ -1,8 +1,8 @@
+ require('./rpc-config.mock.js');
+ jest.doMock('../../../logging/standard_logger');
+-jest.doMock('@uc/armor');
++jest.doMock('@uc-engg/armor');
+ let executeMock = jest.fn(() => Promise.resolve({ data: {} }));
+-require('@uc/armor').initCircuitBreaker.mockImplementationOnce(() => ({
++require('@uc-engg/armor').initCircuitBreaker.mockImplementationOnce(() => ({
+   execute: executeMock
+ }));
+ 
+diff --git a/test/unit/rpc-server.test.js b/test/unit/rpc-server.test.js
+index 8bd4db4..606fe2d 100644
+--- a/test/unit/rpc-server.test.js
++++ b/test/unit/rpc-server.test.js
+@@ -11,8 +11,8 @@ const Constants = require('./resources/constants');
+ const TestSchemas = require('./resources/schema.test.data');
+ const Service = require('./resources/service.test.data');
+ const RpcClient = require('../../rpc-client');
+-jest.mock('@uc/openapi-validator-middleware');
+-const swaggerValidation = require('@uc/openapi-validator-middleware');
++jest.mock('@uc-engg/openapi-validator-middleware');
++const swaggerValidation = require('@uc-engg/openapi-validator-middleware');
+ // const supertest = require('supertest');
+ const app = testSetup.mock;
+ // Module imports end
+diff --git a/test/unit/rpc_client/mock.js b/test/unit/rpc_client/mock.js
+index c5d8b71..a93358d 100644
+--- a/test/unit/rpc_client/mock.js
++++ b/test/unit/rpc_client/mock.js
+@@ -88,7 +88,7 @@ const mockSingleton = () => {
+ }
+ 
+ const mockCircuitBreaker = () => {
+-  jest.mock('@uc/armor', () => (args) => {
++  jest.mock('@uc-engg/armor', () => (args) => {
+     const Promise = require('bluebird');
+     let promiseExecutor = (resolve, reject) => {resolve({body:{}});};
+     return {

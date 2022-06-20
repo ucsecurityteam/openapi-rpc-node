@@ -6,7 +6,7 @@ function initLocalisationService(serviceId, RpcFramework){
   let localisation = {
     /*
       How to use the below methods from SM or any micro service
-      1.) const Singleton = require('openapi-rpc-node').getSingleton();
+      1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
       2.) const L = Singleton.Localisation;
       3.) const R = require('/resources/localization.strings')
       4.)
@@ -25,7 +25,7 @@ function initLocalisationService(serviceId, RpcFramework){
     /*
       How to use the below methods from SM or any micro service
       Note : Here type is dynamic inside Resources. Below method will get called if strings are coming from database
-      1.) const Singleton = require('openapi-rpc-node').getSingleton();
+      1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
       2.) const L = Singleton.Localisation;
       3.) const R = require('/resources/localization.strings')
       4.)
@@ -45,7 +45,7 @@ function initLocalisationService(serviceId, RpcFramework){
        This method will get called from API middle layer. Please don't call it from your micro service until
        and unless you have a specific use case
 
-       1.) const Singleton = require('openapi-rpc-node').getSingleton();
+       1.) const Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
        2.) const L = Singleton.Localisation;
        3.) L.getLocalizedResponse(response, options)
           a.) here response is the api response which we sent to clients

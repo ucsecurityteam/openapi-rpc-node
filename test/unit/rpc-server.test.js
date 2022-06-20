@@ -11,8 +11,8 @@ const Constants = require('./resources/constants');
 const TestSchemas = require('./resources/schema.test.data');
 const Service = require('./resources/service.test.data');
 const RpcClient = require('../../rpc-client');
-jest.mock('@uc/openapi-validator-middleware');
-const swaggerValidation = require('@uc/openapi-validator-middleware');
+jest.mock('@uc-engg/openapi-validator-middleware');
+const swaggerValidation = require('@uc-engg/openapi-validator-middleware');
 // const supertest = require('supertest');
 const app = testSetup.mock;
 // Module imports end

@@ -1,4 +1,4 @@
-const Mycroft = require('@uc/mycroft');
+const Mycroft = require('@uc-engg/mycroft');
 
 const MycroftInitUtil = {}
 

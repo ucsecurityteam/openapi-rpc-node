@@ -12,7 +12,7 @@
  */
 
 var _ = require('lodash');
-var loggerInstance = require('@uc/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
+var loggerInstance = require('@uc-engg/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
 const logFilter = require('./filter');
 const LOG_CONSTANTS = require('./log_constants');
 const LOG_TYPE = require('./log_type');

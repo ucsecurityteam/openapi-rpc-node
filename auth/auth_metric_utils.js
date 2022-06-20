@@ -1,4 +1,4 @@
-const Mycroft = require('@uc/mycroft');
+const Mycroft = require('@uc-engg/mycroft');
 /**
  * Standard Logger should be used when
  * 1. We are logging at the time of server startup (no transaction context present).

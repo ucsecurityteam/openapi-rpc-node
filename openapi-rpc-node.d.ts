@@ -1,6 +1,6 @@
 /// <reference path="types/clients.d.ts" />
 
-declare module 'openapi-rpc-node' {
+declare module '@uc-engg/openapi-rpc-node' {
   export type singletonMapInterface = ClientMap & {Logger: LoggerInterface};
   export type auditContextInterface = {
     getKeys: Function;

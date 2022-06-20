@@ -1,6 +1,6 @@
 'use strict'
 
-const Mycroft = require('@uc/mycroft');
+const Mycroft = require('@uc-engg/mycroft');
 const Logger = require('../logging/standard_logger');
 const LOG_CONSTANTS = require('../logging/log_constants');
 const LOG_TYPE = require('../logging/log_type');

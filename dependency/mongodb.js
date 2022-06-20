@@ -7,6 +7,7 @@ const RPC_CONSTANTS = require('../constants');
 const MONGODB_CONNECTION_OPTIONS = RPC_CONSTANTS.MONGODB_CONNECTION_OPTIONS;
 const _ = require('lodash');
 const Utils = require('./utils');
+const ConfigUtils = require('../common/config_utils');
 let Mongodb = {}
 
 Mongodb.initMongodbClient = async (params, RPCFramework) => {
@@ -118,7 +119,7 @@ function setTimeoutOptions(params){
   if (_.has(params.mongoose_options, MONGODB_CONNECTION_OPTIONS.CONNECT_TIMEOUT_OPTION_KEY)){
     timeoutOptions.socketOptions.connectTimeoutMS = params.mongoose_options[MONGODB_CONNECTION_OPTIONS.CONNECT_TIMEOUT_OPTION_KEY];
   }
-  const pjson = require('../../../package.json');
+  const pjson = require(ConfigUtils.getParentWorkingDir() + '/package.json');
   const mongooseVersion = parseInt(pjson.dependencies.mongoose.replace(/~|\^/g, ''))
   if ( mongooseVersion < 5 ) {
     params.mongoose_options['replset'] = timeoutOptions

@@ -1,4 +1,4 @@
-const LoggingRepo = require('@uc/logging-repo');
+const LoggingRepo = require('@uc-engg/logging-repo');
 const Logger = {
   info: jest.fn(),
   error: jest.fn(),

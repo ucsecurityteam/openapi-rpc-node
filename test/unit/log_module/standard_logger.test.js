@@ -5,7 +5,7 @@ const testSetup = require('../test-loader')();
 // Project specific mocks end
 
 // Module imports start
-var LoggingRepo = require('@uc/logging-repo').initLogger();
+var LoggingRepo = require('@uc-engg/logging-repo').initLogger();
 const testData = testSetup.testData;
 // Module imports end
 

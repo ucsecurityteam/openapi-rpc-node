@@ -238,7 +238,7 @@ RpcFramework.createTrxnId = function() {
  * This allows you to store global objects.
  * This is partiularly useful for storing initialised DB connections, config, logger, etc.
  * How to use –
- *   Singleton = require('openapi-rpc-node').getSingleton();
+ *   Singleton = require('@uc-engg/openapi-rpc-node').getSingleton();
  *   Logger = Singleton.Logger;
  *   Config = Singleton.Config;
  *   MongoMainStore = Singleton.mongoMainStore;
@@ -276,7 +276,7 @@ RpcFramework.getGatewayConstants = function() {
 
 /**
  * Run workflow tasks. src/workflow/index changes example:
- * require('openapi-rpc-node').initWorkflow();
+ * require('@uc-engg/openapi-rpc-node').initWorkflow();
  *
  * For more details, refer below document:
  * https://urbanclap.atlassian.net/wiki/spaces/ENGG/pages/1191051293/How+to+write+a+script+in+nodejs
@@ -287,7 +287,7 @@ RpcFramework.initWorkflow = function() {
 
 /**
  * Run service. server.js file changes example:
- * let RPCFramework = require('openapi-rpc-node').initService()
+ * let RPCFramework = require('@uc-engg/openapi-rpc-node').initService()
  *
  * For more details, refer below document:
  * https://urbanclap.atlassian.net/wiki/spaces/ENGG/pages/1192132689/How+to+write+a+service+in+nodejs
@@ -299,7 +299,7 @@ RpcFramework.initService = function() {
 /**
  * Run the service using using the Service object. server.js file changes example:
  *
- *  let Service = require('openapi-rpc-node').getService();
+ *  let Service = require('@uc-engg/openapi-rpc-node').getService();
  *
  *  Service.initDependency()
  *  .then(function () {
@@ -317,7 +317,7 @@ RpcFramework.getService = function() {
 /**
  * Run workflow task using using the Workflow object. src/workflow/index file changes example:
  *
- *  let workflow = require('openapi-rpc-node').getWorkflow();
+ *  let workflow = require('@uc-engg/openapi-rpc-node').getWorkflow();
  *
  *  workflow.initDependency()
  *  .then(function () {
@@ -352,7 +352,7 @@ RpcFramework.getWorkflow = function() {
  * timeoutInMs -> 0
  *
  * Example:
- * let retryablePromise = require('openapi-rpc-node').getRetryablePromise;
+ * let retryablePromise = require('@uc-engg/openapi-rpc-node').getRetryablePromise;
  * let retryOptions = {
  *  retries: 3,
  *  timeoutInMs: 2000,

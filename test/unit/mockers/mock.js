@@ -1,8 +1,8 @@
 require('./rpc-config.mock.js');
 jest.doMock('../../../logging/standard_logger');
-jest.doMock('@uc/armor');
+jest.doMock('@uc-engg/armor');
 let executeMock = jest.fn(() => Promise.resolve({ data: {} }));
-require('@uc/armor').initCircuitBreaker.mockImplementationOnce(() => ({
+require('@uc-engg/armor').initCircuitBreaker.mockImplementationOnce(() => ({
   execute: executeMock
 }));
 

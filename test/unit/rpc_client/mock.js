@@ -88,7 +88,7 @@ const mockSingleton = () => {
 }
 
 const mockCircuitBreaker = () => {
-  jest.mock('@uc/armor', () => (args) => {
+  jest.mock('@uc-engg/armor', () => (args) => {
     const Promise = require('bluebird');
     let promiseExecutor = (resolve, reject) => {resolve({body:{}});};
     return {

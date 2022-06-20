@@ -3,7 +3,7 @@
 //------------------------- PACKAGES----------------------------//
 
 const _ = require('lodash');
-const Command = require('@uc/armor').initCircuitBreaker();
+const Command = require('@uc-engg/armor').initCircuitBreaker();
 const Constants = require('./constants');
 const LocalisationMetricConstants = Constants.LOCALISATION_METRICS;
 const LOG_CONSTANTS = require('../logging/log_constants');

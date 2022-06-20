@@ -1,4 +1,4 @@
-const Armor = require('@uc/armor');
+const Armor = require('@uc-engg/armor');
 const Singleton = require('../singleton').getSingleton();
 const _ = require('lodash');
 const RequestPromise = require('request-promise');

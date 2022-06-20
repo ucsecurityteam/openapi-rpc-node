@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const loggerInstance = require('@uc/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
+const loggerInstance = require('@uc-engg/logging-repo').initLogger(process.env.LOG_INDEX_NAME);
 const logFilter = require('./logging/filter');
 const Error = require('./error');
 

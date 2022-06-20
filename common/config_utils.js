@@ -13,7 +13,7 @@ const GLOBAL_CONFIG = {
   FILE_NAME: 'global.config.json',
   RELATIVE_PATH_FROM_ROOT: 'configs/global.config.json'
 }
-const OARPC_SERVICE_NAME = '@uc/openapi-rpc-node'
+const OARPC_SERVICE_NAME = '@uc/@uc-engg/openapi-rpc-node'
 
 const mergeWithArrayAsLiteral = (destOject, srcObject) => {
   return _.mergeWith(destOject, srcObject, (objValue, srcValue) => {  if(Array.isArray(objValue) || Array.isArray(srcValue)) return srcValue });

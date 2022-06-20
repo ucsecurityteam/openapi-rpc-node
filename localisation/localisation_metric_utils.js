@@ -1,4 +1,4 @@
-const Mycroft = require('@uc/mycroft');
+const Mycroft = require('@uc-engg/mycroft');
 const _ = require('lodash');
 const Logger = require('../logging/standard_logger');
 const LocalisationMetricConstants = require('./constants').LOCALISATION_METRICS;

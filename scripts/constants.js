@@ -11,7 +11,7 @@ const CONSTANTS = {
   MONOLITH_SCHEMA_FETCH_SUCCESS_RATIO: 0.7,
   MICROSERVICE_SCHEMA_FETCH_SUCCESS_RATIO: 1.0,
   SERVICE_TO_GIT_NAME_MAPPING: SERVICE_TO_GIT_NAME_MAPPING,
-  OARPC_SERVICE_NAME: '@uc/openapi-rpc-node',
+  OARPC_SERVICE_NAME: '@uc/@uc-engg/openapi-rpc-node',
   PLATFORM_CONFIG_SERVICE: 'platform-config-service',
   DEFAULT_DEPENDENCY_FOR_GATEWAY: ['access-control-service'],
   DEFAULT_DEPENDENCY: ['platform-config-service', 'system-healing-service', 'xp-service', 'data-event-service'],

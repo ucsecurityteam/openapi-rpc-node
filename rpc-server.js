@@ -42,7 +42,7 @@ const APPLICATION_METRICS = Monitoring.CONSTANTS.APPLICATION_METRICS;
 const APMTransactionTracker = require('./monitoring/background-transaction-tracker');
 const RpcServer = {};
 const PROFILER_CONSTANTS = require('./profiler/constants');
-const swaggerValidation = require('@uc/openapi-validator-middleware');
+const swaggerValidation = require('@uc-engg/openapi-validator-middleware');
 const { getMethodImplementation } = require('./dependency/utils')
 
 /**

@@ -1,6 +1,6 @@
 const LoggingMetricConstants = require('./logging_metric_constants');
 const LOG_CONSTANTS = require('./log_constants');
-const Mycroft = require('@uc/mycroft');
+const Mycroft = require('@uc-engg/mycroft');
 const RPC_METRICS = require('../monitoring/monitoring_constants').RPC_METRICS;
 const Singleton = require('../singleton').getSingleton();
 const LoggingMetricUtility = {};

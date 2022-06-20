@@ -1,6 +1,6 @@
-# Openapi-rpc-node
+# @uc-engg/openapi-rpc-node
 
-```Openapi-rpc-node``` is a NodeJs library aimed at providing you a complete microservices framework solution. It comes integrated with out of the box solutions to solve for every problem. At urbancompany we have built our entire microservices ecosystem within this library.
+```@uc-engg/openapi-rpc-node``` is a NodeJs library aimed at providing you a complete microservices framework solution. It comes integrated with out of the box solutions to solve for every problem. At urbancompany we have built our entire microservices ecosystem within this library.
 
 Some of the most notable capabilities:
 
@@ -104,7 +104,7 @@ You need to add the below code in your server.js. Here initService returns a pro
 Example:
 ```Javascript
 'use strict';
-let RPCFramework = require('@uc-engg/openapi-rpc-node').initService()
+let RPCFramework = require('@uc-engg/@uc-engg/openapi-rpc-node').initService()
 
 ```
 
