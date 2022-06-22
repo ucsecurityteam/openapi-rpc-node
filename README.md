@@ -1,21 +1,19 @@
-# Openapi-rpc-node
-
-```Openapi-rpc-node``` is opinionated, delarative NodeJS framewrok built on top of express that helps create standardized microservice applications.
+```Openapi-rpc-node``` is an opinionated, declarative NodeJS framework built on top of express that helps create standardized microservice applications.
 
 Some of the most notable capabilities are:
 
 * Rpc clients
 * Schema validation
-* Config management (service, db discovery etc)
+* Config management (service, DB discovery etc)
 * Database and Cache support
 * Pub-Sub events model
 * Rate limiting
 * Circuit breaker
-* Async rpc call
+* Async Rpc call
 * Standardised error handling
 * Vault support for credentials
 * Slack notifications
-* Monitoring (using prometheus)
+* Monitoring (using Prometheus)
 * Scheduled scripts/ workflow support
 * Load shedding
 * CPU and Memory Profiling
@@ -33,7 +31,7 @@ $ npm install @uc-engg/openapi-rpc-node
 
 Checkout [sample-service](https://github.com/urbanclap-engg/sample-service)  
 
-Clone this sample NodeJS application bulilt using openapi-rpc
+Clone this sample NodeJS application built using openapi-rpc
 ```sh
 git clone https://github.com/urbanclap-engg/sample-service.git
 cd sample-service
@@ -48,15 +46,15 @@ npm start
 ```
 
 ## Understanding Declarative Components 
-Openapi-rpc is decalrative in nature which helps in bringing standardisations across microservices applications. Application repo contains config files that Openapi-rpc reads for functionalities like - service and database depedency, enabling vault or credentials.json file as secret store.
+Openapi-rpc is declarative in nature which helps in bringing standardisations across microservices applications. Application repo contains config files that Openapi-rpc reads for functionalities like - service and database dependency, enabling vault or credentials.json file as a secret store.
 
-Let's go over these config files in details.
+Let's go over these config files in detail.
 
 #### ```global.config.json```
 
 Global config as the name suggests has configs that are shared across the services. Example - service, databases, resource discovery blocks. List of configs blocks present:
 
-- This global config is used as discovery for service endpoints(including service's own discovery), database endpoints, slack tokens etc. Example, if you want to call service B from service A, then Service A's global config file looks like
+- This global config is used as a discovery for service endpoints(including the service's own discovery), database endpoints, slack tokens etc. For example, if you want to call service B from service A, then Service A's global config file looks like
 ```Javascript
 {
   'sample-service-A': {
@@ -76,10 +74,10 @@ Global config as the name suggests has configs that are shared across the servic
 }
 ```
 
-- Configure dependency schema source for your service here, we need this compiled json of all swagger docs of this service along with its dependent services (ones given in dependency.config.js as 'INTERNAL_SERVICE'). 
+- Configure the dependency schema source for your service here, we need this compiled json of all swagger docs of this service along with its dependent services (ones given in dependency.config.js as 'INTERNAL_SERVICE'). 
 There are couple of options to configure:
-    - [Default] Write a custom logic to create this file and configure its location to be picked by the library. By default dependency_schemas.json is kept at service's root directory ie <service-name>/dependency_schemas.json
-    Example in platform.config.js put below configuration. In this case dependency_schemas.json is kept at service's root directory.
+    - [Default] Write a custom logic to create this file and configure its location to be picked by the library. By default, dependency_schemas.json is kept at the service's root directory ie <service-name>/dependency_schemas.json
+    Example in platform.config.js put below configuration. In this case, dependency_schemas.json is kept in the service's root directory.
 
      ```Javascript
     "serviceDependencySchema" : {
@@ -90,7 +88,7 @@ There are couple of options to configure:
   }
   ```
 
-- If you host your service repositories on Gitlab, you can configure gitlab settings in configs/global.config.json and schema will be fetched from Gitlab.
+- If you host your service repositories on Gitlab, you can configure GitLab settings in configs/global.config.json and schema will be fetched from Gitlab.
 
     ```Javascript
     "serviceDependencySchema" : {
@@ -104,7 +102,7 @@ There are couple of options to configure:
   }
     ```
 
-  - You can assign the responsibility of getting schema jsons to an internal-service. In that case, you can skip this configuration & create a service (in UC's context it is platform-config-service) and add this service as a dependency in global.config.json. This service can have an api to pull and combine all schema jsons for your service.
+  - You can assign the responsibility of getting schema jsons to an internal-service. In that case, you can skip this configuration & create a service (in UC's context it is platform-config-service) and add this service as a dependency in global.config.json. This service can have an API to pull and combine all schema jsons for your service.
 
 - Databse cluster discovery
     ```Javascript
@@ -122,7 +120,7 @@ There are couple of options to configure:
     }
   ```
 - Database, database cluster mapping
-    Each db has a unique ID, this would be present in global config and you would refer to it with this `ID` in your codebase too. It would be of this format: <db_type>_<db_name>. Example, if you are connecting to `my_test_database` database in mongodb, then the global config should have this key `mongodb_my_test_database`.
+    Each DB has a unique ID, this would be present in the global config and you would refer to it with this `ID` in your codebase too. It would be of this format: <db_type>_<db_name>. For example, if you are connecting to `my_test_database` database in MongoDB, then the global config should have this key `mongodb_my_test_database`.
 
     ```Javascript
     "mongodb_my_test_database": {
@@ -146,7 +144,7 @@ We have standardized the way we write dependency config and server.js. You have 
   }
   ```
 
-`Dependency types` : Give the type of dependency that the service/script requires. Given below is the list of all dependency types
+`Dependency types`: Give the type of dependency that the service/script requires. Given below is the list of all dependency types
 
   - MONGODB
   - MYSQL
@@ -206,7 +204,7 @@ List of dependency types can be accessed in dependency.config.js file through
   ```
 
 #### ```platform.config.json```
-This config file contains - what all services are whitelisted to make an api call to this service. Also, credentialStore property is set here to configure source of fetching credentials, options are - vault and credentials_json.
+This config file contains whitelisted service ids which are allowed to make an API call to this service. Also, the credentialStore property is set here to configure the source of fetching credentials, options are - vault and credentials_json.
 ```javascript
 {
     "credentialStore": "credentials_json",
@@ -224,7 +222,7 @@ This files store credentials that are accessed via
   ```
 It provides a standard way to access secrets. 
 
-Database cluster uri discovery credentials placeholders - __username__, __password__ is populated from here. Format to keep database access credentials is 
+Database cluster URI discovery credentials placeholders - __username__, __password__ is populated from here. Format to keep database access credentials is 
 ```json
 {
   "mongodb": {
@@ -241,7 +239,7 @@ Database cluster uri discovery credentials placeholders - __username__, __passwo
 ```
 
 #### ```package.json```
-Configure your package json with below information, as openapi-rpc will pick details from package.json.
+Configure your package json with the below information, as openapi-rpc will pick details from package.json.
 
   ```Javascript
   "name": "<service-id>",
@@ -251,8 +249,6 @@ Configure your package json with below information, as openapi-rpc will pick det
 
 `name`: It should contain the SERVICE_ID which we used to write in server.js. It will now be picked from this key.
 
-`main`: This should contain the controller file path. Here controller file is the file exporting a list of api name mapped to its corresponding handlers. Refer here. Example: If the path for controller file is src/service/index.js, then 'main' should contain- "service/index".
+`main`: This should contain the controller file path. Here controller file is the file exporting a list of API names mapped to its corresponding handlers. Refer here. Example: If the path for controller file is src/service/index.js, then 'main' should contain- "service/index".
 
 `service_type`: The `service_type` field is used to specify if the service is javascript or typescript, based on that we decide from where to pick the controller file (i.e. dist or src).
-
-
