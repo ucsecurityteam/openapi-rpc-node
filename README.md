@@ -1,16 +1,17 @@
-# @uc-engg/openapi-rpc-node
+# Openapi-rpc-node
 
-```@uc-engg/openapi-rpc-node``` is a NodeJs library aimed at providing you a complete microservices framework solution. It comes integrated with out of the box solutions to solve for every problem. At urbancompany we have built our entire microservices ecosystem within this library.
+```Openapi-rpc-node``` is opinionated, delarative NodeJS framewrok built on top of express that helps create standardized microservice applications.
 
-Some of the most notable capabilities:
+Some of the most notable capabilities are:
 
 * Rpc clients
 * Schema validation
-* Event handling
+* Config management (service, db discovery etc)
 * Database and Cache support
+* Pub-Sub events model
 * Rate limiting
 * Circuit breaker
-* Async api call (using kafka)
+* Async rpc call
 * Standardised error handling
 * Vault support for credentials
 * Slack notifications
@@ -19,8 +20,8 @@ Some of the most notable capabilities:
 * Load shedding
 * CPU and Memory Profiling
 * Language localisation
-* Api authentication
-* Standard logger
+* Api authentication & authorization
+* Standard logging
 
  
 ## Installation
@@ -28,24 +29,46 @@ Some of the most notable capabilities:
 $ npm install @uc-engg/openapi-rpc-node
 ```
 
-## Usage
-If you are ready to explore this library & want to play around with it, checkout the sample-service from: https://github.com/urbanclap-engg/sample-service. We have written a bare bones service to get a glimpse of what this framework can do for you.
+## Quick Start
 
-### Configuration
-* ```global.config.json```
+Checkout [sample-service](https://github.com/urbanclap-engg/sample-service)  
 
-- This global config is used as discovery for service endpoints, database endpoints, slack tokens etc. You can put downstream service details here. Example, if you want to call sample-service-B from sample-service-A, you would need to put following block in configs/global.config.json
+Clone this sample NodeJS application bulilt using openapi-rpc
+```sh
+git clone https://github.com/urbanclap-engg/sample-service.git
+cd sample-service
+```
+Install Dependencies:
+```sh
+npm install
+```
+Start the Server:
+```sh
+npm start
+```
 
+## Understanding Declarative Components 
+Openapi-rpc is decalrative in nature which helps in bringing standardisations across microservices applications. Application repo contains config files that Openapi-rpc reads for functionalities like - service and database depedency, enabling vault or credentials.json file as secret store.
+
+Let's go over these config files in details.
+
+#### ```global.config.json```
+
+Global config as the name suggests has configs that are shared across the services. Example - service, databases, resource discovery blocks. List of configs blocks present:
+
+- This global config is used as discovery for service endpoints(including service's own discovery), database endpoints, slack tokens etc. Example, if you want to call service B from service A, then Service A's global config file looks like
 ```Javascript
 {
-  'sample-service-B': {
-    deployment: {
-      auth_service_ids: [
-        'sample-service-A'
-      ]
-    },
+  'sample-service-A': {
     discovery: {
-      port: 1199,
+      port: 1001,
+      uri: localhost
+    },
+    type: 'service'
+  },
+  'sample-service-B': {
+    discovery: {
+      port: 1002,
       uri: localhost
     },
     type: 'service'
@@ -53,15 +76,27 @@ If you are ready to explore this library & want to play around with it, checkout
 }
 ```
 
-- Configure dependency schema source for your service here. There are couple of options:
-    - Create a file dependency_schemas.json with all your downstream services' schema doc and place it at service's node_modules/ location.
-    - If you host your service repositories on Gitlab, you can configure gitlab settings in configs/global.config.json and schema will be fetched from Gitlab. (compatible with Gitlab api v14)
+- Configure dependency schema source for your service here, we need this compiled json of all swagger docs of this service along with its dependent services (ones given in dependency.config.js as 'INTERNAL_SERVICE'). 
+There are couple of options to configure:
+    - [Default] Write a custom logic to create this file and configure its location to be picked by the library. By default dependency_schemas.json is kept at service's root directory ie <service-name>/dependency_schemas.json
+    Example in platform.config.js put below configuration. In this case dependency_schemas.json is kept at service's root directory.
+
+     ```Javascript
+    "serviceDependencySchema" : {
+    "type": "custom",
+    "properties": {
+      "generatedSchemaFilePath": "dependency_schemas.json",
+    }
+  }
+  ```
+
+- If you host your service repositories on Gitlab, you can configure gitlab settings in configs/global.config.json and schema will be fetched from Gitlab.
 
     ```Javascript
     "serviceDependencySchema" : {
     "type": "gitlab",
     "properties": {
-      "generatedSchemaFilePath": "node_modules/dependency_schemas.json",
+      "generatedSchemaFilePath": "dependency_schemas.json",
       "gitUri": "http://my.gitlab.location.com/",
       "gitToken": <gitToken>,
       "gitGroupName": <groupName-optional>"
@@ -69,54 +104,150 @@ If you are ready to explore this library & want to play around with it, checkout
   }
     ```
 
+  - You can assign the responsibility of getting schema jsons to an internal-service. In that case, you can skip this configuration & create a service (in UC's context it is platform-config-service) and add this service as a dependency in global.config.json. This service can have an api to pull and combine all schema jsons for your service.
 
-- Database naming convention
-    Each db has a unique id, this would be present in global config and you would refer it with this ID in your codebase too. It would be of this format: <db_type>_<db_name>. Example, if you are connecting to `my_test_database` database in mongodb, then the global config should have this key `mongodb_my_test_database`.
+- Databse cluster discovery
+    ```Javascript
+    "database-uri": {
+        "mongodb": {
+            "<db_name>": {
+                "uri": "mongodb://__username__:__password__@<mongo-replica-set-url>:<port>/__db_name__?replicaSet=<replica-set-name>"
+            }
+        },
+        "mysql": {
+            "<db_name>": {
+                "uri": "mysql://__username__:__password__@<mysql-db-url>:<port>/__db_name__"
+            }
+        }
+    }
+  ```
+- Database, database cluster mapping
+    Each db has a unique ID, this would be present in global config and you would refer to it with this `ID` in your codebase too. It would be of this format: <db_type>_<db_name>. Example, if you are connecting to `my_test_database` database in mongodb, then the global config should have this key `mongodb_my_test_database`.
 
-```Javascript
-"mongodb_my_test_database": {
-  "type": "database",
-  "db_type": "mongodb",
-  "db_cluster_name": "dev-databases",
-  "db_name": "my_test_database"
+    ```Javascript
+    "mongodb_my_test_database": {
+      "type": "database",
+      "db_type": "mongodb",
+      "db_cluster_name": "dev-databases",
+      "db_name": "my_test_database"
+    }
+    ```
+#### ```dependency.config.js```
+We have standardized the way we write dependency config and server.js. You have to create a new config file in this path: configs/dependency.config.js in the service repo. Here, 'dependency' signifies all the connections or clients the service needs to run itself.
+
+  ```Javascript
+  {
+    service: {
+      <dependency_type>: [{
+        id: <dependency_id>,
+        <options based on schema>
+      }]
+    }
+  }
+  ```
+
+`Dependency types` : Give the type of dependency that the service/script requires. Given below is the list of all dependency types
+
+  - MONGODB
+  - MYSQL
+  - INTERNAL_SERVICE
+
+
+List of dependency types can be accessed in dependency.config.js file through 
+  ```Javascript
+  require('@uc-engg/openapi-rpc-node').getDependencyConfig().TYPE
+  ```
+
+  Example of a dependency.config.js file
+  ```Javascript
+
+  'use strict';
+
+  const Sequelize = require('sequelize');
+  const DEPENDENCY = require('@uc-engg/openapi-rpc-node').getDependencyConfig();
+  const CONFIG = require('@uc-engg/openapi-rpc-node').getSingleton().Config;
+
+  let Config = {
+    service: {
+      [DEPENDENCY.TYPE.MONGODB]: [
+        {
+          id: DEPENDENCY.ID.MONGODB.mongodb_my_test_database,
+          mongoose_options: {
+            autoIndex: false,
+            reconnectTries: Number.MAX_VALUE,
+            reconnectInterval: 500,
+            poolSize: 10,
+            bufferMaxEntries: 0
+          }
+        }
+      ],
+      [DEPENDENCY.TYPE.MYSQL]: [
+        {
+          id: DEPENDENCY.ID.MYSQL.mysql_main_db,
+          sequelize_options: {
+            pool: { min: 2, max: 4, idle: 60000 },
+            isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED,
+            omitNull: true
+          },
+          sync: true
+        }
+      ],
+      [DEPENDENCY.TYPE.INTERNAL_SERVICE]: [
+        {
+          id: DEPENDENCY.ID.INTERNAL_SERVICE["sample-service"],
+          version: 0
+        }
+      ]
+  }
+
+  module.exports = {
+    Config: Config
+  };
+  ```
+
+#### ```platform.config.json```
+This config file contains - what all services are whitelisted to make an api call to this service. Also, credentialStore property is set here to configure source of fetching credentials, options are - vault and credentials_json.
+```javascript
+{
+    "credentialStore": "credentials_json",
+    "authServiceIds": [
+        "sample-service"
+      ]
 }
 ```
 
-* ```server.js``` 
-We have removed the boilerplate code from server.js. This includes initializing logger, slack, config, service_id, UCError and initServer).
+#### ```.credentials.json```
 
-This initializes the Singleton with the following objects:
+This files store credentials that are accessed via 
+  ```javascript
+  require('@uc-engg/openapi-rpc-node').getSingleton().CUSTOM;
+  ```
+It provides a standard way to access secrets. 
 
-    - Logger
-
-    - Slack
-
-    - UCError
-
-    - Config
-
-All the dependency id mentioned in dependency.config.json (more in below sections)
-
-Along with the above objects, it does initCredentials (to fetch service credentials from CMS for db connections) and initServer (initializes service using schema repo and runs it). If we dont have CMS (credential management system, we can follow <RITIK to add>)
-
-You need to add the below code in your server.js. Here initService returns a promise, and if you have any custom initialization specific to your service, you can do it by adding a .then() after initService().
-
-Example:
-```Javascript
-'use strict';
-let RPCFramework = require('@uc-engg/@uc-engg/openapi-rpc-node').initService()
-
+Database cluster uri discovery credentials placeholders - __username__, __password__ is populated from here. Format to keep database access credentials is 
+```json
+{
+  "mongodb": {
+    "dev-mongo": {
+      "core_provider": {
+        "readwrite": {
+          "password": "my_password",
+          "username": "my_username"
+        }
+      }
+    }
+  }
+}
 ```
 
-
-* ```package.json```
+#### ```package.json```
 Configure your package json with below information, as openapi-rpc will pick details from package.json.
 
-```Javascript
-"name": "<service-id>",
-"main": "index",
-"service_type": "<javascript or typescript>"
-```
+  ```Javascript
+  "name": "<service-id>",
+  "main": "index",
+  "service_type": "<javascript or typescript>"
+  ```
 
 `name`: It should contain the SERVICE_ID which we used to write in server.js. It will now be picked from this key.
 
@@ -125,119 +256,3 @@ Configure your package json with below information, as openapi-rpc will pick det
 `service_type`: The `service_type` field is used to specify if the service is javascript or typescript, based on that we decide from where to pick the controller file (i.e. dist or src).
 
 
-* ```dependency.config.js```
-We have standardized the way we write dependency config and server.js. You have to create a new config file in this path: configs/dependency.config.js in the service repo. Here, 'dependency' signifies all the connections or clients the service needs to run itself.
-
-```Javascript
-{
-
-    service: {
-
-        <dependency_type>: [{
-
-             id: <dependency_id>,
-
-             <options based on schema>
-
-        }]
-
-    }
-
-}
-```
-
-`Dependency types` : Give the type of dependency that the service/script requires. Given below is the list of all dependency types
-
-    MONGODB
-
-    MYSQL
-
-    INTERNAL_SERVICE
-
-
-List of dependency types can be accessed in dependency.config.js file through 
-```Javascript
-require('@uc-engg/openapi-rpc-node').getDependencyConfig().TYPE
-```
-
-Example of a dependency.config.js file
-```Javascript
-
-'use strict';
-
-const Sequelize = require('sequelize');
-const DEPENDENCY = require('@uc-engg/openapi-rpc-node').getDependencyConfig();
-const CONFIG = require('@uc-engg/openapi-rpc-node').getSingleton().Config;
-
-let Config = {
-  service: {
-    [DEPENDENCY.TYPE.MONGODB]: [
-      {
-        id: DEPENDENCY.ID.MONGODB.mongodb_my_test_database,
-        mongoose_options: {
-          autoIndex: false,
-          reconnectTries: Number.MAX_VALUE,
-          reconnectInterval: 500,
-          poolSize: 10,
-          bufferMaxEntries: 0
-        }
-      }
-    ],
-    [DEPENDENCY.TYPE.MYSQL]: [
-      {
-        id: DEPENDENCY.ID.MYSQL.mysql_main_db,
-        sequelize_options: {
-          pool: { min: 2, max: 4, idle: 60000 },
-          isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_UNCOMMITTED,
-          omitNull: true
-        },
-        sync: true
-      }
-    ],
-    [DEPENDENCY.TYPE.INTERNAL_SERVICE]: [
-      {
-        id: DEPENDENCY.ID.INTERNAL_SERVICE["sample-service"],
-        version: 0
-      }
-    ]
-}
-
-module.exports = {
-  Config: Config
-};
-```
-
-#### How to run a sample service
-
-Checkout sample-service given in sample-service from here: https://github.com/urbanclap-engg/sample-service
-
-- Initialisation code in `server.ts`
-
-```Javascript
-'use strict';
-
-const RPCFramework = require('@uc-engg/openapi-rpc-node');
-
-RPCFramework.initService();
-```
-
-- Test api in `service/index.ts`
-```Javascript
-const testApi = async () => ({ success: 'ok' });
-
-const MyTestApis = {
-  testApi,
-};
-
-export = {
-  ...MyTestApis,
-}
-```
-
-- `configs` has configuration files that service needs to start.
-        -   dependency.config.js
-        -   platform.config.json
-        -   sample-rpc-microservice.config.json
-        -   global.config.json
-
-- `schema` has swagger json for service's schema

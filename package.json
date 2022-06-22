@@ -1,6 +1,6 @@
 {
   "name": "@uc-engg/openapi-rpc-node",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An RPC (OpenApi 2.0) framework for node using express",
   "main": "index.js",
   "repository": {
