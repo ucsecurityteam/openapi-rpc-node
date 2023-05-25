@@ -29,7 +29,7 @@
     "body-parser": "^1.18.2",
     "cls-bluebird": "^2.0.1",
     "cls-hooked": "4.2.2",
-    "elastic-apm-node": "3.27.0",
+    "elastic-apm-node": "3.46.0",
     "expand-swagger-refs": "^2.0.1",
     "express": "^4.16.2",
     "@types/babel__traverse": "7.0.8",
