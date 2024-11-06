@@ -59,7 +59,7 @@
     "typescript": "3.1.6",
     "express-jwt": "3.3.0",
     "request-stats": "3.0.0",
-    "aws-sdk": "2.846.0",
+    "aws-sdk": "2.1692.0",
     "pprof": "1.2.0",
     "heapdump": "0.3.15",
     "@google-cloud/profiler": "3.0.1",
