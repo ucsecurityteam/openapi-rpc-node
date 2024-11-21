@@ -65,7 +65,7 @@
     "@google-cloud/profiler": "3.0.1",
     "@uc-engg/openapi-validator-middleware": "^1.0.0",
     "agentkeepalive": "4.1.4",
-    "axios": "~0.21.1"
+    "axios": "~0.29.0"
   },
   "typings": "openapi-rpc-node.d.ts"
 }
