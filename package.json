@@ -64,7 +64,7 @@
     "heapdump": "0.3.15",
     "@google-cloud/profiler": "3.0.1",
     "@uc-engg/openapi-validator-middleware": "^1.0.0",
-    "agentkeepalive": "4.1.4",
+    "agentkeepalive": "4.6.0",
     "axios": "~0.21.1"
   },
   "typings": "openapi-rpc-node.d.ts"
